@@ -24,7 +24,9 @@ function rewriteUserAgentHeader(e) {
         return;
     let dateTime = (new Date()).toISOString().replace(/[-:\.]/g, '').replace(/T(\d{6})\d*Z/, 'T$1Z');
 
-    let canonicalUri = encodeURI(url.pathname);
+    let canonicalUri = encodeURI(url.pathname).replace(/[!'()*]/g, function (c) {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
 
     let canonicalQuery = '';
     Array.from(url.searchParams.keys()).sort().forEach(function (param) {
@@ -33,7 +35,10 @@ function rewriteUserAgentHeader(e) {
             canonicalQuery += '&' + encodeURIComponent(param) + '=';
         } else {
             values.forEach(function (value) {
-                canonicalQuery += '&' + encodeURIComponent(param) + '=' + encodeURIComponent(value);
+                canonicalQuery += '&' + encodeURIComponent(param) + '=' +
+                    encodeURIComponent(value).replace(/[!'()*]/g, function (c) {
+                        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+                    });
             });
         }
     });
