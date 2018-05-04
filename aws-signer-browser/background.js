@@ -29,7 +29,7 @@ function rewriteUserAgentHeader(e) {
     });
 
     let canonicalQuery = '';
-    Array.from(url.searchParams.keys()).sort().forEach(function (param) {
+    Array.from(new Set(Array.from(url.searchParams.keys()))).sort().forEach(function (param) {
         let values = url.searchParams.getAll(param).sort();
         if (values.length === 0) {
             canonicalQuery += '&' + encodeURIComponent(param) + '=';
