@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>AWS Signer</title>
+    <link rel="stylesheet" href="/third_party/materialize/materialize.min.css">
+    <script src="/third_party/materialize/materialize.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <ul id="slide-out" class="sidenav sidenav-fixed">
+            <li class="logo" style="padding-top: 50px; padding-bottom: 50px;">
+                <a class="brand-logo center" style="height: 150px;">
+                    <object type="image/png" data="/icons/aws.png" style="height: 100%;"></object>
+                </a>
+            </li>
+            <li>
+                <a class="waves-effect" href="#credentials">Credentials</a>
+            </li>
+            <li>
+                <a class="waves-effect" href="#new_service">New Service</a>
+            </li>
+            <li>
+                <a class="waves-effect" href="#defined_services">Defined Services</a>
+            </li>
+        </ul>
+    </header>
+    <main style="padding-left: 300px;">
+        <div class="container">
+            <div class="row">
+                <div class="section scrollspy">
+                    <h6 class="header light-blue-text text-lighten-1" id="credentials">Credentials</h6>
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input placeholder="Access Key ID" id="aws_key" type="text" class="validate">
+                            <label for="aws_key">Key</label>
+                        </div>
+                        <div class="input-field col s8">
+                            <input placeholder="Secret Access Key" id="aws_secret" type="password" class="validate">
+                            <label for="aws_secret">Secret</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="section scrollspy">
+                    <h6 class="header light-blue-text text-lighten-1" id="new_service">New Service</h6>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input placeholder="Region" id="aws_region" type="text" class="validate">
+                            <label for="aws_region">Region</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input placeholder="Service" id="aws_service" type="text" class="validate">
+                            <label for="aws_service">Service</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input placeholder="Hostname" id="aws_host" type="text" class="validate">
+                            <label for="aws_host">Host</label>
+                        </div>
+                    </div>
+                    <div class="row" style="float: right;">
+                        <a class="waves-effect waves-light btn" style="margin-right: 20px;" id="add">Add</a>
+                    </div>
+                </div>
+                <div class="section scrollspy">
+                    <h6 class="header light-blue-text text-lighten-1" id="defined_services">Defined Services</h6>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="textarea1" class="materialize-textarea" placeholder="[]" style="min-height: 300px;"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="float: right;">
+                        <a class="waves-effect waves-light btn" style="margin-right: 20px;" id="save">Save</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/settings/settings.js"></script>
+</body>
+
+</html>

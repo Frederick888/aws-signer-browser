@@ -1,0 +1,40 @@
+{
+    "name": "AWS Signer Browser",
+    "description": "Automatically sign requests to AWS",
+    "version": "1.0",
+    "manifest_version": 2,
+    "applications": {
+        "gecko": {
+            "id": "aws-signer-browser@tsundere.moe"
+        }
+    },
+    "icons": {
+        "48": "icons/aws-48.png"
+    },
+    "permissions": [
+        "storage",
+        "notifications",
+        "webRequest",
+        "webRequestBlocking",
+        "tabs",
+        "*://*.amazonaws.com/*"
+    ],
+    "background": {
+        "scripts": [
+            "background.js",
+            "third_party/crypto-js/crypto-js.js"
+        ]
+    },
+    "options_ui": {
+        "page": "options/options.html",
+        "browser_style": true
+    },
+    "browser_action": {
+        "default_icon": {
+            "19": "icons/aws-19.png",
+            "38": "icons/aws-38.png"
+        },
+        "default_title": "AWS Signer",
+        "default_popup": "popup/popup.html"
+    }
+}
