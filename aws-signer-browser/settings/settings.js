@@ -32,6 +32,22 @@ document.getElementById('aws_secret').addEventListener("change", (e) => {
     notifySettingsChange();
 });
 
+let hostRegexp = /^(?:[\w\*-]+\.)?(?:([a-z]{2}-[a-z]{4,10}-\d+)\.)?([a-z]{2,10})\.amazonaws\.com$/i;
+document.getElementById('aws_host').addEventListener("change", (e) => {
+    let host = e.target.value;
+    host = host.replace(/^https?:\/\//i, '');
+    document.getElementById('aws_host').value = host;
+    if (hostRegexp.test(host)) {
+        let matches = hostRegexp.exec(host);
+        if (matches[1] !== undefined && document.getElementById('aws_region').value == "") {
+            document.getElementById('aws_region').value = matches[1];
+        }
+        if (matches[2] !== undefined && document.getElementById('aws_service').value == "") {
+            document.getElementById('aws_service').value = matches[2];
+        }
+    }
+});
+
 document.getElementById('add').addEventListener("click", () => {
     let service = {
         region: document.getElementById('aws_region').value,
@@ -59,6 +75,13 @@ document.getElementById('add').addEventListener("click", () => {
     document.getElementById('aws_region').value = '';
     document.getElementById('aws_service').value = '';
     document.getElementById('aws_host').value = '';
+
+    document.getElementById('add').setAttribute('disabled', 1);
+    document.getElementById('add').innerText = 'Added';
+    setTimeout(() => {
+        document.getElementById('add').removeAttribute('disabled');
+        document.getElementById('add').innerText = 'Add';
+    }, 1000);
 });
 
 document.getElementById('save').addEventListener("click", () => {
@@ -79,4 +102,11 @@ document.getElementById('save').addEventListener("click", () => {
         defined_services: definedServicesJson,
     });
     notifySettingsChange();
+
+    document.getElementById('save').setAttribute('disabled', 1);
+    document.getElementById('save').innerText = 'Saved';
+    setTimeout(() => {
+        document.getElementById('save').removeAttribute('disabled');
+        document.getElementById('save').innerText = 'Save';
+    }, 1000);
 });

@@ -5,13 +5,13 @@ let hashedPayloads = [];
 let algorithm = 'AWS4-HMAC-SHA256';
 let access_key_id;
 let secret_access_key;
-let definedServices = [];
+let definedServices = {};
 
 browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services'])
     .then(function (result) {
         access_key_id = result.aws_key || "";
         secret_access_key = result.aws_secret || "";
-        definedServices = [];
+        definedServices = {};
         JSON.parse(result.defined_services || "[]").forEach(function (service) {
             definedServices[service.host] = service;
         });
@@ -20,7 +20,7 @@ browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services'])
 function rewriteUserAgentHeader(e) {
     let method = e.method;
     let url = new URL(e.url);
-    if (!(url.host in definedServices))
+    if (!isMatchDefinedServices(url.host))
         return;
     let dateTime = (new Date()).toISOString().replace(/[-:\.]/g, '').replace(/T(\d{6})\d*Z/, 'T$1Z');
 
@@ -155,6 +155,18 @@ function updateBadge(tab) {
         return;
     }
     badgeOff(tab.id);
+}
+
+function asteriskToRegexp(host) {
+    return new RegExp(host.replace('*', '[\w-]*'));
+}
+
+function isMatchDefinedServices(host) {
+    for (let defined in definedServices) {
+        if (asteriskToRegexp(defined).test(host))
+            return true;
+    }
+    return false;
 }
 
 browser.runtime.onMessage.addListener(function (message) {
