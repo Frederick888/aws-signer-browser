@@ -20,7 +20,8 @@ browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services'])
 function rewriteUserAgentHeader(e) {
     let method = e.method;
     let url = new URL(e.url);
-    if (!isMatchDefinedServices(url.host))
+    let definedHost = isMatchDefinedServices(url.host);
+    if (definedHost === false)
         return;
     let dateTime = (new Date()).toISOString().replace(/[-:\.]/g, '').replace(/T(\d{6})\d*Z/, 'T$1Z');
 
@@ -81,8 +82,8 @@ function rewriteUserAgentHeader(e) {
 
     let credentialScope = [
         dateTime.split('T')[0],
-        encodeURIComponent(definedServices[url.host].region),
-        encodeURIComponent(definedServices[url.host].service),
+        encodeURIComponent(definedServices[definedHost].region),
+        encodeURIComponent(definedServices[definedHost].service),
         'aws4_request'
     ].join('/');
     let stringToSign = algorithm + "\n" +
@@ -94,8 +95,8 @@ function rewriteUserAgentHeader(e) {
 
     let kSecret = secret_access_key;
     let kDate = sign('AWS4' + kSecret, dateTime.split('T')[0]);
-    let kRegion = sign(kDate, definedServices[url.host].region);
-    let kService = sign(kRegion, definedServices[url.host].service);
+    let kRegion = sign(kDate, definedServices[definedHost].region);
+    let kService = sign(kRegion, definedServices[definedHost].service);
     let kSigning = sign(kService, 'aws4_request');
 
     let signature = sign(kSigning, stringToSign).toString(CryptoJS.enc.Hex).toLowerCase();
@@ -164,7 +165,7 @@ function asteriskToRegexp(host) {
 function isMatchDefinedServices(host) {
     for (let defined in definedServices) {
         if (asteriskToRegexp(defined).test(host))
-            return true;
+            return defined;
     }
     return false;
 }
