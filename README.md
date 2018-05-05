@@ -9,3 +9,15 @@ This extension is largely inspired by [aws-request-signer](https://github.com/ca
 0. Fill in AWS key and secret
 0. Add new services
 0. There you go :P
+
+# Example
+To enable AWS Signer on all ElasticSearch services in region `us-east-1`:
+```
+[
+    {
+        "region": "us-east-1",
+        "service": "es",
+        "host": "*.us-east-1.es.amazonaws.com"
+    }
+]
+```
