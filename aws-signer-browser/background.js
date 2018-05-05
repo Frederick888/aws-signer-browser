@@ -150,7 +150,7 @@ function badgeOff(tabId) {
 
 function updateBadge(tab) {
     let url = new URL(tab.url);
-    if (url.host in definedServices) {
+    if (isMatchDefinedServices(url.host)) {
         badgeOn(tab.id);
         return;
     }
