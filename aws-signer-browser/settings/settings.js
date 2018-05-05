@@ -55,6 +55,16 @@ document.getElementById('add').addEventListener("click", () => {
         service: document.getElementById('aws_service').value,
         host: document.getElementById('aws_host').value,
     };
+    for (let field in service) {
+        if (service[field].length == 0) {
+            browser.notifications.create(null, {
+                type: 'basic',
+                message: 'All three properties must be defined!',
+                title: 'Incomplete Service Definition',
+            });
+            return;
+        }
+    }
     let definedServices;
     try {
         definedServices = JSON.parse(document.getElementById('textarea1').value || "[]");
