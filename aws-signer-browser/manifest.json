@@ -26,10 +26,6 @@
             "third_party/crypto-js/crypto-js.js"
         ]
     },
-    "options_ui": {
-        "page": "options/options.html",
-        "browser_style": true
-    },
     "browser_action": {
         "default_icon": {
             "19": "icons/aws-19.png",
