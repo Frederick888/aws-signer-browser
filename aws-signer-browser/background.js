@@ -1,3 +1,4 @@
+let enabled = true;
 let ignoreHeaders = ['connection'];
 
 let hashedPayloads = [];
@@ -7,7 +8,7 @@ let access_key_id;
 let secret_access_key;
 let definedServices = {};
 
-browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services'])
+browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services', 'enabled'])
     .then(function (result) {
         access_key_id = result.aws_key || "";
         secret_access_key = result.aws_secret || "";
@@ -15,9 +16,12 @@ browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services'])
         JSON.parse(result.defined_services || "[]").forEach(function (service) {
             definedServices[service.host] = service;
         });
+        enabled = result.enabled === undefined ? true : result.enabled;
     });
 
 function rewriteUserAgentHeader(e) {
+    if (!enabled)
+        return;
     let method = e.method;
     let url = new URL(e.url);
     let definedHost = isMatchDefinedServices(url.host);
@@ -150,6 +154,10 @@ function badgeOff(tabId) {
 }
 
 function updateBadge(tab) {
+    if (!enabled) {
+        badgeOff(tab.id);
+        return;
+    }
     let url = new URL(tab.url);
     if (isMatchDefinedServices(url.host)) {
         badgeOn(tab.id);
@@ -171,12 +179,19 @@ function isMatchDefinedServices(host) {
 }
 
 browser.runtime.onMessage.addListener(function (message) {
-    access_key_id = message.aws_key;
-    secret_access_key = message.aws_secret;
-    definedServices = [];
-    JSON.parse(message.defined_services || "[]").forEach(function (service) {
-        definedServices[service.host] = service;
-    });
+    if ('enabled' in message) {
+        enabled = message.enabled;
+        browser.storage.local.set({
+            enabled: enabled
+        });
+    } else {
+        access_key_id = message.aws_key;
+        secret_access_key = message.aws_secret;
+        definedServices = [];
+        JSON.parse(message.defined_services || "[]").forEach(function (service) {
+            definedServices[service.host] = service;
+        });
+    }
     browser.tabs.query({}).then((tabs) => {
         for (let tab of tabs) {
             updateBadge(tab);
