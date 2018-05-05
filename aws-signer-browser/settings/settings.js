@@ -36,6 +36,7 @@ let hostRegexp = /^(?:[\w\*-]+\.)?(?:([a-z]{2}-[a-z]{4,10}-\d+)\.)?([a-z]{2,10})
 document.getElementById('aws_host').addEventListener("change", (e) => {
     let host = e.target.value;
     host = host.replace(/^https?:\/\//i, '');
+    host = host.replace(/(amazonaws\.com)\/.*$/i, '$1');
     document.getElementById('aws_host').value = host;
     if (hostRegexp.test(host)) {
         let matches = hostRegexp.exec(host);
