@@ -81,7 +81,7 @@ document.getElementById('add').addEventListener("click", () => {
     setTimeout(() => {
         document.getElementById('add').removeAttribute('disabled');
         document.getElementById('add').innerText = 'Add';
-    }, 1000);
+    }, 700);
 });
 
 document.getElementById('save').addEventListener("click", () => {
@@ -108,5 +108,5 @@ document.getElementById('save').addEventListener("click", () => {
     setTimeout(() => {
         document.getElementById('save').removeAttribute('disabled');
         document.getElementById('save').innerText = 'Save';
-    }, 1000);
+    }, 700);
 });
