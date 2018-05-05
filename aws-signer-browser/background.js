@@ -9,11 +9,11 @@ let secret_access_key;
 let definedServices = {};
 
 browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services', 'enabled'])
-    .then(function (result) {
+    .then((result) => {
         access_key_id = result.aws_key || "";
         secret_access_key = result.aws_secret || "";
         definedServices = {};
-        JSON.parse(result.defined_services || "[]").forEach(function (service) {
+        JSON.parse(result.defined_services || "[]").forEach((service) => {
             definedServices[service.host] = service;
         });
         enabled = result.enabled === undefined ? true : result.enabled;
@@ -29,19 +29,19 @@ function rewriteUserAgentHeader(e) {
         return;
     let dateTime = (new Date()).toISOString().replace(/[-:\.]/g, '').replace(/T(\d{6})\d*Z/, 'T$1Z');
 
-    let canonicalUri = encodeURI(url.pathname).replace(/[!'()*]/g, function (c) {
+    let canonicalUri = encodeURI(url.pathname).replace(/[!'()*]/g, (c) => {
         return '%' + c.charCodeAt(0).toString(16).toUpperCase();
     });
 
     let canonicalQuery = '';
-    Array.from(new Set(Array.from(url.searchParams.keys()))).sort().forEach(function (param) {
+    Array.from(new Set(Array.from(url.searchParams.keys()))).sort().forEach((param) => {
         let values = url.searchParams.getAll(param).sort();
         if (values.length === 0) {
             canonicalQuery += '&' + encodeURIComponent(param) + '=';
         } else {
-            values.forEach(function (value) {
+            values.forEach((value) => {
                 canonicalQuery += '&' + encodeURIComponent(param) + '=' +
-                    encodeURIComponent(value).replace(/[!'()*]/g, function (c) {
+                    encodeURIComponent(value).replace(/[!'()*]/g, (c) => {
                         return '%' + c.charCodeAt(0).toString(16).toUpperCase();
                     });
             });
@@ -54,7 +54,7 @@ function rewriteUserAgentHeader(e) {
         'x-amz-date': [dateTime],
         'x-amz-content-sha256': [hashedPayloads[e.requestId]],
     };
-    e.requestHeaders.forEach(function (header) {
+    e.requestHeaders.forEach((header) => {
         let name = header.name.trim().toLowerCase();
         if (ignoreHeaders.includes(name))
             return;
@@ -65,7 +65,7 @@ function rewriteUserAgentHeader(e) {
             trimmedHeaders[name] = [value];
         }
     });
-    Object.keys(trimmedHeaders).sort().forEach(function (name) {
+    Object.keys(trimmedHeaders).sort().forEach((name) => {
         canonicalHeader += name + ':' + trimmedHeaders[name].join() + "\n";
     });
 
@@ -115,16 +115,16 @@ function rewriteUserAgentHeader(e) {
     console.log(authorizationHeader);
 
     e.requestHeaders.push({
-        'name': 'x-amz-date',
-        'value': dateTime,
+        name: 'x-amz-date',
+        value: dateTime,
     });
     e.requestHeaders.push({
-        'name': 'x-amz-content-sha256',
-        'value': hashedPayloads[e.requestId],
+        name: 'x-amz-content-sha256',
+        value: hashedPayloads[e.requestId],
     });
     e.requestHeaders.push({
-        'name': 'Authorization',
-        'value': authorizationHeader,
+        name: 'Authorization',
+        value: authorizationHeader,
     });
     return {
         requestHeaders: e.requestHeaders
@@ -183,7 +183,7 @@ function isMatchDefinedServices(host) {
     return false;
 }
 
-browser.runtime.onMessage.addListener(function (message) {
+browser.runtime.onMessage.addListener((message) => {
     if ('enabled' in message) {
         enabled = message.enabled;
         browser.storage.local.set({
@@ -193,7 +193,7 @@ browser.runtime.onMessage.addListener(function (message) {
         access_key_id = message.aws_key;
         secret_access_key = message.aws_secret;
         definedServices = [];
-        JSON.parse(message.defined_services || "[]").forEach(function (service) {
+        JSON.parse(message.defined_services || "[]").forEach((service) => {
             definedServices[service.host] = service;
         });
     }
@@ -212,7 +212,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
     }
 });
 browser.webRequest.onBeforeRequest.addListener(
-    function (e) {
+    (e) => {
         let hashedPayload = getHashedPayload(e);
         hashedPayloads[e.requestId] = hashedPayload;
     }, {
