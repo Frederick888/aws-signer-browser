@@ -52,6 +52,7 @@ function rewriteUserAgentHeader(e) {
     let canonicalHeader = '';
     let trimmedHeaders = {
         'x-amz-date': [dateTime],
+        'x-amz-content-sha256': [hashedPayloads[e.requestId]],
     };
     e.requestHeaders.forEach(function (header) {
         let name = header.name.trim().toLowerCase();
@@ -116,6 +117,10 @@ function rewriteUserAgentHeader(e) {
     e.requestHeaders.push({
         'name': 'x-amz-date',
         'value': dateTime,
+    });
+    e.requestHeaders.push({
+        'name': 'x-amz-content-sha256',
+        'value': hashedPayloads[e.requestId],
     });
     e.requestHeaders.push({
         'name': 'Authorization',
