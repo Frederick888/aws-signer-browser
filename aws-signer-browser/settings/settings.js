@@ -121,3 +121,27 @@ document.getElementById('save').addEventListener("click", () => {
         document.getElementById('save').innerText = 'Save';
     }, 700);
 });
+
+let inputFields = document.querySelectorAll('.input-field input');
+inputFields.forEach(inputField => {
+    let postfix = inputField.parentElement.querySelector('.postfix');
+    if (postfix) {
+        inputField.addEventListener('focus', () => {
+            postfix.classList.add('active');
+        });
+        inputField.addEventListener('blur', () => {
+            postfix.classList.remove('active');
+        });
+        postfix.addEventListener('click', () => {
+            if (postfix.classList.contains('mdi-eye-off')) {
+                postfix.classList.remove('mdi-eye-off');
+                postfix.classList.add('mdi-eye');
+                inputField.setAttribute('type', 'text');
+            } else {
+                postfix.classList.remove('mdi-eye');
+                postfix.classList.add('mdi-eye-off');
+                inputField.setAttribute('type', 'password');
+            }
+        });
+    }
+});

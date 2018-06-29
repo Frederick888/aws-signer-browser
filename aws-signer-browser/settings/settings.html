@@ -8,6 +8,28 @@
     <link rel="stylesheet" href="/third_party/materialize/materialize.min.css">
     <script src="/third_party/materialize/materialize.js"></script>
     <link rel="icon" href="/icons/aws-19.png" type="image/png">
+    <link rel="stylesheet" href="/third_party/materialdesignicons/css/materialdesignicons.min.css">
+    <style>
+        .input-field .postfix~input {
+            width: 80%;
+            width: calc(100% - 3rem);
+            margin-left: 0px;
+            margin-right: 3rem !important;
+        }
+
+        .input-field .postfix {
+            position: absolute;
+            width: 3rem;
+            right: 0px;
+            font-size: 2rem;
+            -webkit-transition: color .2s;
+            transition: color .2s;
+        }
+
+        .input-field .postfix.active {
+            color: #26a69a;
+        }
+    </style>
 </head>
 
 <body>
@@ -40,6 +62,7 @@
                             <label for="aws_key">Key</label>
                         </div>
                         <div class="input-field col s8">
+                            <i class="postfix mdi mdi-eye-off"></i>
                             <input placeholder="Secret Access Key" id="aws_secret" type="password" class="validate">
                             <label for="aws_secret">Secret</label>
                         </div>
