@@ -10,5 +10,6 @@ zip -r ../aws-signer-browser.zip * \
     -i 'node_modules/@mdi/font/css/*.css' \
     -i 'node_modules/@mdi/font/fonts/*' \
     -i 'node_modules/crypto-js/*'
+zip -d ../aws-signer-browser.zip '**/.DS_Store' '**/*.min.js' '**/*.min.css'
 
 cd ..
