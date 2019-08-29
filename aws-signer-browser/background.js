@@ -27,23 +27,28 @@ function rewriteUserAgentHeader(e) {
     let definedHost = isMatchDefinedServices(url.host);
     if (definedHost === false)
         return;
+    let definedService = definedServices[definedHost].service;
     let dateTime = (new Date()).toISOString().replace(/[-:\.]/g, '').replace(/T(\d{6})\d*Z/, 'T$1Z');
 
-    let canonicalUri = encodeURI(url.pathname).replace(/[!'()*]/g, (c) => {
-        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-    });
+    let canonicalUri;
+    if (definedService === 's3') {
+        canonicalUri = e.url.replace(/^\w*:\/\/.+?(\/.*)?(\?.*?)?$/, '$1');
+        if (canonicalUri.length === 0) canonicalUri = '/';
+    } else {
+        canonicalUri = url.pathname.replace(/\/{2,}/g, '/');
+    }
+    canonicalUri = canonicalUri.split(/\//g)
+        .map(v => rfc3986EncodeUriComponent(v))
+        .join('/');
 
     let canonicalQuery = '';
     Array.from(new Set(Array.from(url.searchParams.keys()))).sort().forEach((param) => {
         let values = url.searchParams.getAll(param).sort();
         if (values.length === 0) {
-            canonicalQuery += '&' + encodeURIComponent(param) + '=';
+            canonicalQuery += '&' + rfc3986EncodeUriComponent(param) + '=';
         } else {
             values.forEach((value) => {
-                canonicalQuery += '&' + encodeURIComponent(param) + '=' +
-                    encodeURIComponent(value).replace(/[!'()*]/g, (c) => {
-                        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-                    });
+                canonicalQuery += '&' + rfc3986EncodeUriComponent(param) + '=' + rfc3986EncodeUriComponent(value);
             });
         }
     });
