@@ -1,0 +1,10 @@
+{
+  "name": "aws-signer-browser",
+  "license": "MIT",
+  "dependencies": {
+    "@mdi/font": "^4.2.95",
+    "@mdi/svg": "^4.2.95",
+    "crypto-js": "^3.1.9-1",
+    "materialize-css": "^1.0.0"
+  }
+}

@@ -23,7 +23,7 @@
     "background": {
         "scripts": [
             "background.js",
-            "third_party/crypto-js/crypto-js.js"
+            "node_modules/crypto-js/crypto-js.js"
         ]
     },
     "browser_action": {
