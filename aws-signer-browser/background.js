@@ -83,6 +83,9 @@ function rewriteUserAgentHeader(e) {
         signedHeaders + "\n" +
         hashedPayloads[e.requestId];
     console.log("\n\n");
+    console.log('==== Service ====');
+    console.log(definedService);
+    console.log(definedHost);
     console.log('==== Canonical Request ====');
     console.log(canonicalRequest);
 
