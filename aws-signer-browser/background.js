@@ -144,6 +144,17 @@ function getHashedPayload(request) {
     return CryptoJS.SHA256('').toString(CryptoJS.enc.Hex).toLowerCase();
 }
 
+function rfc3986EncodeUriComponent(stringToEncode) {
+    return encodeURIComponent(decodeURIComponentPlus(stringToEncode))
+        .replace(/[!'()*]/g, function (c) {
+            return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+        });
+}
+
+function decodeURIComponentPlus(stringToDecode) {
+    return decodeURIComponent(stringToDecode.replace(/\+/g, '%20'));
+}
+
 function badgeOn(tabId) {
     browser.browserAction.setBadgeText({
         text: '🔑',
