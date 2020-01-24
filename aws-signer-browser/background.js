@@ -191,7 +191,7 @@ function updateBadge(tab) {
 }
 
 function asteriskToRegexp(host) {
-    return new RegExp(host.replace('*', '[\w-]*'));
+    return new RegExp(host.replace('*', '[\\w-]*'), 'i');
 }
 
 function isMatchDefinedServices(host) {
