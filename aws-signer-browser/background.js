@@ -235,11 +235,11 @@ browser.webRequest.onBeforeRequest.addListener(
         let hashedPayload = getHashedPayload(e);
         hashedPayloads[e.requestId] = hashedPayload;
     }, {
-        urls: ["*://*.amazonaws.com/*"]
-    }, ["blocking", "requestBody"]
+    urls: ["*://*.amazonaws.com/*"]
+}, ["blocking", "requestBody"]
 );
 browser.webRequest.onBeforeSendHeaders.addListener(
     rewriteUserAgentHeader, {
-        urls: ["*://*.amazonaws.com/*"]
-    }, ["blocking", "requestHeaders"]
+    urls: ["*://*.amazonaws.com/*"]
+}, ["blocking", "requestHeaders"]
 );
