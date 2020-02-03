@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-cd ./aws-signer-browser
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-zip -r -FS ../aws-signer-browser.zip * \
+cd "$DIR/aws-signer-browser" || { printf 'Project directory aws-signer-browser not found?\n'; exit 1; }
+
+zip -r -FS ../aws-signer-browser.zip -- * \
     -x 'node_modules/*' \
     -x package.json -x yarn.lock
-zip -r ../aws-signer-browser.zip * \
+zip -r ../aws-signer-browser.zip -- * \
     -i 'node_modules/materialize-css/dist/*' \
     -i 'node_modules/@mdi/font/css/*.css' \
     -i 'node_modules/@mdi/font/fonts/*' \
