@@ -42,9 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services'])
         .then((result) => {
-            document.getElementById('aws_key').value = result.aws_key || "";
-            document.getElementById('aws_secret').value = result.aws_secret || "";
-            document.getElementById('textarea1').value = result.defined_services || "";
+            document.getElementById('aws_key').value = result.aws_key || '';
+            document.getElementById('aws_secret').value = result.aws_secret || '';
+            document.getElementById('textarea1').value = result.defined_services || '';
         });
     browser.permissions.getAll()
         .then((result) => {
@@ -57,14 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-document.getElementById('aws_key').addEventListener("change", (e) => {
+document.getElementById('aws_key').addEventListener('change', (e) => {
     browser.storage.local.set({
         aws_key: e.target.value,
     });
     notifySettingsChange();
 });
 
-document.getElementById('aws_secret').addEventListener("change", (e) => {
+document.getElementById('aws_secret').addEventListener('change', (e) => {
     browser.storage.local.set({
         aws_secret: e.target.value,
     });
@@ -112,23 +112,23 @@ document.getElementById('save-patterns').addEventListener('click', () => {
 });
 
 let hostRegexp = /^(?:[\w\*-]+\.)?(?:([a-z]{2}-[a-z]{4,10}-\d+)\.)?([a-z]{2,10})\.amazonaws\.com$/i;
-document.getElementById('aws_host').addEventListener("change", (e) => {
+document.getElementById('aws_host').addEventListener('change', (e) => {
     let host = e.target.value;
     host = host.replace(/^https?:\/\//i, '');
     host = host.replace(/(amazonaws\.com)\/.*$/i, '$1');
     document.getElementById('aws_host').value = host;
     if (hostRegexp.test(host)) {
         let matches = hostRegexp.exec(host);
-        if (matches[1] !== undefined && document.getElementById('aws_region').value == "") {
+        if (matches[1] !== undefined && document.getElementById('aws_region').value == '') {
             document.getElementById('aws_region').value = matches[1];
         }
-        if (matches[2] !== undefined && document.getElementById('aws_service').value == "") {
+        if (matches[2] !== undefined && document.getElementById('aws_service').value == '') {
             document.getElementById('aws_service').value = matches[2];
         }
     }
 });
 
-document.getElementById('add').addEventListener("click", () => {
+document.getElementById('add').addEventListener('click', () => {
     let service = {
         region: document.getElementById('aws_region').value,
         service: document.getElementById('aws_service').value,
@@ -146,7 +146,7 @@ document.getElementById('add').addEventListener("click", () => {
     }
     let definedServices;
     try {
-        definedServices = JSON.parse(document.getElementById('textarea1').value || "[]");
+        definedServices = JSON.parse(document.getElementById('textarea1').value || '[]');
     } catch (e) {
         browser.notifications.create(null, {
             type: 'basic',
@@ -169,10 +169,10 @@ document.getElementById('add').addEventListener("click", () => {
     timeoutInnerText(document.getElementById('add'), 'Added');
 });
 
-document.getElementById('save-services').addEventListener("click", () => {
+document.getElementById('save-services').addEventListener('click', () => {
     let definedServices;
     try {
-        definedServices = JSON.parse(document.getElementById('textarea1').value || "[]");
+        definedServices = JSON.parse(document.getElementById('textarea1').value || '[]');
     } catch (e) {
         timeoutInnerText(document.getElementById('save-services'), 'Failed');
         browser.notifications.create(null, {

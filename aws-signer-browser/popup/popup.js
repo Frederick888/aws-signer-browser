@@ -5,7 +5,7 @@ browser.storage.local.get(['enabled'])
     });
 
 function toggleSigner(notify = true) {
-    let button = document.getElementById("switch");
+    let button = document.getElementById('switch');
     if (button.innerText == 'ENABLED') {
         button.classList.replace('blue', 'red');
         button.classList.replace('darken-1', 'darken-3');
@@ -25,11 +25,11 @@ function toggleSigner(notify = true) {
     }
 }
 
-document.getElementById("settings").addEventListener("click", function () {
+document.getElementById('settings').addEventListener('click', function () {
     browser.tabs.create({
-        url: "/settings/settings.html"
+        url: '/settings/settings.html'
     });
     window.close();
 });
 
-document.getElementById("switch").addEventListener("click", toggleSigner);
+document.getElementById('switch').addEventListener('click', toggleSigner);

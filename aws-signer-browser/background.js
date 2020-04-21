@@ -10,10 +10,10 @@ let definedServices = {};
 
 browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services', 'enabled'])
     .then((result) => {
-        access_key_id = result.aws_key || "";
-        secret_access_key = result.aws_secret || "";
+        access_key_id = result.aws_key || '';
+        secret_access_key = result.aws_secret || '';
         definedServices = {};
-        JSON.parse(result.defined_services || "[]").forEach((service) => {
+        JSON.parse(result.defined_services || '[]').forEach((service) => {
             definedServices[service.host] = service;
         });
         enabled = result.enabled === undefined ? true : result.enabled;
@@ -27,12 +27,12 @@ function rebindWebRequestListeners() {
         browser.webRequest.onBeforeRequest.addListener(
             recordPayloadHash, {
             urls: patterns
-        }, ["blocking", "requestBody"]
+        }, ['blocking', 'requestBody']
         );
         browser.webRequest.onBeforeSendHeaders.addListener(
             rewriteUserAgentHeader, {
             urls: patterns
-        }, ["blocking", "requestHeaders"]
+        }, ['blocking', 'requestHeaders']
         );
     } else {
         if (browser.webRequest.onBeforeRequest.hasListener(recordPayloadHash)) {
@@ -109,7 +109,7 @@ function rewriteUserAgentHeader(e) {
         canonicalHeader += name + ':' + trimmedHeaders[name].join() + "\n";
     });
 
-    let signedHeaders = Object.keys(trimmedHeaders).sort().join(";");
+    let signedHeaders = Object.keys(trimmedHeaders).sort().join(';');
 
     let canonicalRequest = method + "\n" +
         canonicalUri + "\n" +
@@ -249,7 +249,7 @@ browser.runtime.onMessage.addListener((message) => {
         access_key_id = message.aws_key;
         secret_access_key = message.aws_secret;
         definedServices = {};
-        JSON.parse(message.defined_services || "[]").forEach((service) => {
+        JSON.parse(message.defined_services || '[]').forEach((service) => {
             definedServices[service.host] = service;
         });
         rebindWebRequestListeners();
