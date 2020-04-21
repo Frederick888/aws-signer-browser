@@ -29,6 +29,25 @@
         .input-field .postfix.active {
             color: #26a69a;
         }
+
+        #host-patterns td:last-child,
+        #host-patterns th:last-child {
+            width: 1.2rem;
+        }
+
+        #host-patterns td {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        #host-patterns th {
+            padding-top: 0;
+        }
+
+        #host-patterns .input-field {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 
@@ -42,6 +61,9 @@
             </li>
             <li>
                 <a class="waves-effect" href="#credentials">Credentials</a>
+            </li>
+            <li>
+                <a class="waves-effect" href="#patterns">Host Patterns</a>
             </li>
             <li>
                 <a class="waves-effect" href="#new_service">New Service</a>
@@ -69,10 +91,57 @@
                     </div>
                 </div>
                 <div class="section scrollspy">
+                    <h6 class="header light-blue-text text-lighten-1" id="patterns">
+                        Host Patterns
+                        <a target="_blank" title="Host match pattern"
+                            href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/permissions#Host_permissions">
+                            <i class="mdi mdi-information-outline"></i>
+                        </a>
+                    </h6>
+                    <div class="row">
+                        <table id="host-patterns" class="striped">
+                            <thead>
+                                <th>Patterns (Special pattern '&lt;all_urls&gt;' can be used to allow all URLs)</th>
+                                <th>
+                                    <a id="add-pattern" class="waves-effect waves-light btn-small light-blue lighten-1">
+                                        <i class="mdi mdi-plus"></i>
+                                    </a>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr id="host-pattern-placeholder" style="display: none;">
+                                    <td colspan="2" style="text-align: center; ">
+                                        <i class="grey-text">(no patterns defined yet)</i>
+                                    </td>
+                                </tr>
+                                <tr id="host-pattern-template" style="display: none;">
+                                    <td>
+                                        <div class="input-field">
+                                            <input type="text" class="validate valid" placeholder="Pattern"
+                                                pattern="^(https?|wss?|file|ftp|\*):\/\/(\*|\*\.[^*/]+|[^*/]+)\/.*$|^file:\/\/\/.*$|^resource:\/\/(\*|\*\.[^*/]+|[^*/]+)\/.*$|^about:|^<all_urls>$">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a class="waves-effect waves-light red lighten-1 btn-small">
+                                            <i class="mdi mdi-delete"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row" style="float: right;">
+                        <a class="waves-effect waves-light btn" style="margin-right: 20px;" id="save-patterns">
+                            Save Patterns
+                        </a>
+                    </div>
+                </div>
+                <div class="section scrollspy">
                     <h6 class="header light-blue-text text-lighten-1" id="new_service">New Service</h6>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input placeholder="Host (* for alphanumerics, underscore and hyphen)" id="aws_host" type="text" class="validate">
+                            <input placeholder="Host (* for alphanumerics, underscore and hyphen)" id="aws_host"
+                                type="text" class="validate">
                             <label for="aws_host">Host</label>
                         </div>
                     </div>
@@ -94,11 +163,14 @@
                     <h6 class="header light-blue-text text-lighten-1" id="defined_services">Defined Services</h6>
                     <div class="row">
                         <div class="input-field col s12">
-                            <textarea id="textarea1" class="materialize-textarea" placeholder="[]" style="min-height: 300px;"></textarea>
+                            <textarea id="textarea1" class="materialize-textarea" placeholder="[]"
+                                style="min-height: 300px;"></textarea>
                         </div>
                     </div>
                     <div class="row" style="float: right;">
-                        <a class="waves-effect waves-light btn" style="margin-right: 20px;" id="save">Save JSON</a>
+                        <a class="waves-effect waves-light btn" style="margin-right: 20px;" id="save-services">
+                            Save JSON
+                        </a>
                     </div>
                 </div>
             </div>

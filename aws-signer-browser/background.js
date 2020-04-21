@@ -17,7 +17,37 @@ browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services', 'enabled
             definedServices[service.host] = service;
         });
         enabled = result.enabled === undefined ? true : result.enabled;
+        rebindWebRequestListeners();
     });
+
+function rebindWebRequestListeners() {
+    let patterns = Object.keys(definedServices)
+        .map((pattern) => '*://' + pattern + '/*');
+    if (patterns.length > 0) {
+        browser.webRequest.onBeforeRequest.addListener(
+            recordPayloadHash, {
+            urls: patterns
+        }, ["blocking", "requestBody"]
+        );
+        browser.webRequest.onBeforeSendHeaders.addListener(
+            rewriteUserAgentHeader, {
+            urls: patterns
+        }, ["blocking", "requestHeaders"]
+        );
+    } else {
+        if (browser.webRequest.onBeforeRequest.hasListener(recordPayloadHash)) {
+            browser.webRequest.onBeforeRequest.removeListener(recordPayloadHash);
+        }
+        if (browser.webRequest.onBeforeSendHeaders.hasListener(rewriteUserAgentHeader)) {
+            browser.webRequest.onBeforeSendHeaders.removeListener(rewriteUserAgentHeader);
+        }
+    }
+}
+
+function recordPayloadHash(e) {
+    let hashedPayload = getHashedPayload(e);
+    hashedPayloads[e.requestId] = hashedPayload;
+};
 
 function rewriteUserAgentHeader(e) {
     if (!enabled)
@@ -207,14 +237,18 @@ browser.runtime.onMessage.addListener((message) => {
         enabled = message.enabled;
         browser.storage.local.set({
             enabled: enabled
-        });
+        }).then(() =>
+            console.log('==== Service ' + (enabled ? 'Enabled' : 'Disabled') + ' ====')
+        );
     } else {
         access_key_id = message.aws_key;
         secret_access_key = message.aws_secret;
-        definedServices = [];
+        definedServices = {};
         JSON.parse(message.defined_services || "[]").forEach((service) => {
             definedServices[service.host] = service;
         });
+        rebindWebRequestListeners();
+        console.log('==== Settings Updated ====')
     }
     browser.tabs.query({}).then((tabs) => {
         for (let tab of tabs) {
@@ -230,16 +264,3 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
         updateBadge(tabInfo);
     }
 });
-browser.webRequest.onBeforeRequest.addListener(
-    (e) => {
-        let hashedPayload = getHashedPayload(e);
-        hashedPayloads[e.requestId] = hashedPayload;
-    }, {
-    urls: ["*://*.amazonaws.com/*"]
-}, ["blocking", "requestBody"]
-);
-browser.webRequest.onBeforeSendHeaders.addListener(
-    rewriteUserAgentHeader, {
-    urls: ["*://*.amazonaws.com/*"]
-}, ["blocking", "requestHeaders"]
-);
