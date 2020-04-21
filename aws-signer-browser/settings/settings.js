@@ -111,7 +111,7 @@ document.getElementById('save-patterns').addEventListener('click', () => {
     }
 });
 
-let hostRegexp = /^(?:[\w\*-]+\.)?(?:([a-z]{2}-[a-z]{4,10}-\d+)\.)?([a-z]{2,10})\.amazonaws\.com$/i;
+let hostRegexp = /^(?:[\w\*-]+\.)?(?:([a-z]{2}-[a-z]{4,10}-\d+)\.)?([a-z]{2,10})\.amazonaws\.com$|^(?:[\w\*-]+\.)?s3-([a-z]{2}-[a-z]{4,10}-\d+)\.amazonaws\.com$/i;
 document.getElementById('aws_host').addEventListener('change', (e) => {
     let host = e.target.value;
     host = host.replace(/^https?:\/\//i, '');
@@ -124,6 +124,14 @@ document.getElementById('aws_host').addEventListener('change', (e) => {
         }
         if (matches[2] !== undefined && document.getElementById('aws_service').value == '') {
             document.getElementById('aws_service').value = matches[2];
+        }
+        if (matches[3] !== undefined) {
+            if (document.getElementById('aws_region').value == '') {
+                document.getElementById('aws_region').value = matches[3];
+            }
+            if (document.getElementById('aws_service').value == '') {
+                document.getElementById('aws_service').value = 's3';
+            }
         }
     }
 });
