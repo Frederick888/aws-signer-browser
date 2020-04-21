@@ -45,6 +45,11 @@ function rebindWebRequestListeners() {
 }
 
 function recordPayloadHash(e) {
+    if (!enabled)
+        return;
+    if (e.tabId != -1) {
+        badgeOn(e.tabId);
+    }
     let hashedPayload = getHashedPayload(e);
     hashedPayloads[e.requestId] = hashedPayload;
 };
