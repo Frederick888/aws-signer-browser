@@ -174,6 +174,7 @@ document.getElementById('save-services').addEventListener("click", () => {
     try {
         definedServices = JSON.parse(document.getElementById('textarea1').value || "[]");
     } catch (e) {
+        timeoutInnerText(document.getElementById('save-services'), 'Failed');
         browser.notifications.create(null, {
             type: 'basic',
             message: 'Defined services field does not contain a valid JSON!',
