@@ -240,6 +240,21 @@ function isMatchDefinedServices(host) {
 browser.runtime.onMessage.addListener((message) => {
     if ('enabled' in message) {
         enabled = message.enabled;
+        if (enabled) {
+            browser.browserAction.setIcon({
+                path: {
+                    19: "icons/aws-19.png",
+                    38: "icons/aws-38.png",
+                },
+            });
+        } else {
+            browser.browserAction.setIcon({
+                path: {
+                    19: "icons/aws-19-grey.png",
+                    38: "icons/aws-38-grey.png",
+                },
+            });
+        }
         browser.storage.local.set({
             enabled: enabled
         }).then(() =>
