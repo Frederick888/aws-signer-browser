@@ -17,6 +17,7 @@ browser.storage.local.get(['aws_key', 'aws_secret', 'defined_services', 'enabled
             definedServices[service.host] = service;
         });
         enabled = result.enabled === undefined ? true : result.enabled;
+        updateToolbarIcon(enabled);
         rebindWebRequestListeners();
     });
 
@@ -225,6 +226,24 @@ function updateBadge(tab) {
     badgeOff(tab.id);
 }
 
+function updateToolbarIcon(enabled) {
+    if (enabled) {
+        browser.browserAction.setIcon({
+            path: {
+                19: "icons/aws-19.png",
+                38: "icons/aws-38.png",
+            },
+        });
+    } else {
+        browser.browserAction.setIcon({
+            path: {
+                19: "icons/aws-19-grey.png",
+                38: "icons/aws-38-grey.png",
+            },
+        });
+    }
+}
+
 function asteriskToRegexp(host) {
     return new RegExp(host.replace('*', '[\\w-]*'), 'i');
 }
@@ -240,21 +259,7 @@ function isMatchDefinedServices(host) {
 browser.runtime.onMessage.addListener((message) => {
     if ('enabled' in message) {
         enabled = message.enabled;
-        if (enabled) {
-            browser.browserAction.setIcon({
-                path: {
-                    19: "icons/aws-19.png",
-                    38: "icons/aws-38.png",
-                },
-            });
-        } else {
-            browser.browserAction.setIcon({
-                path: {
-                    19: "icons/aws-19-grey.png",
-                    38: "icons/aws-38-grey.png",
-                },
-            });
-        }
+        updateToolbarIcon(enabled);
         browser.storage.local.set({
             enabled: enabled
         }).then(() =>
